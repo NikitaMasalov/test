@@ -130,7 +130,63 @@ tree.heading("id", text="ID")
 tree.heading("farvor", text="Имя")
 tree.heading("You", text="Возраст")
 
-# Настройка столбцов
+ Настройка столбцов
 tree.column("id", width=50, anchor=tk.CENTER)
 tree.column("farvor", width=150)
 tree.column("You", width=80, anchor=tk.CENTER)
+
+пРОВЕРКА ВАЛИДАЦИИ
+
+ef check_data():
+    # Получаем данные из полей
+    text_value = entry1.get().strip()
+    number_value = entry2.get().strip()
+    float_value = entry3.get().strip()
+
+    errors = []  # Список ошибок
+
+    # 1. Проверка первого поля (только буквы, без цифр)
+    if not text_value.isalpha():
+        errors.append("◉ Поле 1: Допустимы только буквы (без цифр и символов)")
+
+    # 2. Проверка второго поля (целое число)
+    if not number_value.isdigit():
+        errors.append("◉ Поле 2: Введите целое число (например: 5, 100)")
+
+    # 3. Проверка третьего поля (число с запятой)
+    try:
+        # Заменяем запятую на точку и пробуем преобразовать
+        float(float_value.replace(",", "."))
+    except ValueError:
+        errors.append("◉ Поле 3: Введите число с запятой (например: 0,5 или 3,14)")
+
+    # Выводим ошибки или успех
+    if errors:
+        messagebox.showerror("Ошибка", "\n".join(errors))
+    else:
+        messagebox.showinfo("✅ Успех", "Данные введены верно!")
+
+# Создаем окно
+root = tk.Tk()
+root.title("Проверка данных")
+root.geometry("300x250")
+
+# Поле 1: Только буквы
+ttk.Label(root, text="Только буквы:").pack(pady=5)
+entry1 = ttk.Entry(root)
+entry1.pack()
+
+# Поле 2: Только целые числа
+ttk.Label(root, text="Только целые числа:").pack(pady=5)
+entry2 = ttk.Entry(root)
+entry2.pack()
+
+# Поле 3: Числа с запятой
+ttk.Label(root, text="Числа с запятой (0,5):").pack(pady=5)
+entry3 = ttk.Entry(root)
+entry3.pack()
+
+# Кнопка проверки
+ttk.Button(root, text="Проверить", command=check_data).pack(pady=10)
+
+root.mainloop()
